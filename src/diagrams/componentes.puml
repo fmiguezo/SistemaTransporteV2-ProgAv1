@@ -1,0 +1,45 @@
+@startuml
+skinparam componentStyle rectangle
+
+package "Entrada (Adaptadores)" {
+  [CLI] as CLI
+  [Script] as Script
+}
+
+package "Puerto Primario" {
+  interface SistemaDeTransporte
+}
+
+package "Núcleo de Aplicación" {
+  [TransporteServiceImpl] as Core
+}
+
+package "Puerto Secundario (Transporte)" {
+  interface Transporte
+  [Auto] as Auto
+  [Dron] as Dron
+}
+
+package "DTO" {
+  [ViajeDTO]
+}
+
+package "Tests" {
+  [TransporteServiceTest]
+}
+
+' Conexiones
+CLI --> SistemaDeTransporte : usar
+Script --> SistemaDeTransporte : usar
+
+SistemaDeTransporte <|.. Core : implementación
+Core --> Transporte : usar
+
+Transporte <|.. Auto
+Transporte <|.. Dron
+
+Core --> ViajeDTO : devuelve
+
+TransporteServiceTest --> Core : prueba directamente
+
+@enduml
